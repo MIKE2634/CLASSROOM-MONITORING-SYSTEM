@@ -1,0 +1,144 @@
+
+<DOCTYPE!html>
+<head>
+<meta charset="UTF-8">
+ </head>
+ <style>
+.nav{
+background color:teal;
+top:0%;
+position:fixed;
+width:100%;
+LEFT:0;
+}
+
+ul{
+list-style-type:none;
+overflow:hidden;
+margin:0;
+padding:0;
+background-color:teal;
+}
+li a{
+display:block;
+text-decoration:none;
+padding:16px 16px;
+text-align:right;
+color:white;
+}
+li a:hover{
+background-color:red;
+}
+li{
+float:right;
+}
+body {
+  background-image:url(images.jfif);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: cover;
+ }
+  
+</style>
+
+<body>
+  <div>
+<div class="nav">
+<ul>
+<li><a href="hall.html"> HALLS </a> </li>
+<li><a href="labs.html"> LABS </a> </li>
+  <li><a href="abhh.html">ABH ROOMS </a> </li>
+ <li><a href="lccs.html">LC ROOMS </a> </li>
+<li><a href="TB.html">TB ROOMS</a> </li>
+</ul>
+</div>
+</div>
+<div>
+
+ 
+   <!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Clock</title>
+      <link rel="stylesheet" href="index.css">
+   </head>
+   <body>
+   <style>
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+body {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     height: 100vh;
+     background: #000;
+     padding: 0;
+     margin: 0;
+     box-sizing: border-box;
+     font-family: 'IBM Plex Sans', sans-serif;
+}
+.glow {
+     font-size: 60px;
+     color: #fff;
+     font-weight: bold;
+     animation: glow 1s ease-in-out infinite alternate;
+     -moz-animation: glow 1s ease-in-out infinite alternate;
+     -webkit-animation: glow 1s ease-in-out infinite alternate;}
+</style>
+      <div>
+         <div style="color: white;">The Time is: </div>
+         <div id="Clock" class="glow">00:00:00</div>
+      </div>
+    
+<script>
+setInterval(displayTime, 1000);
+
+function displayTime() {
+
+    const timeNow = new Date();
+
+    let hoursOfDay = timeNow.getHours();
+    let minutes = timeNow.getMinutes();
+    let seconds = timeNow.getSeconds();
+    let weekDay = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    let today = weekDay[timeNow.getDay()];
+    let months = timeNow.toLocaleString("default", {
+        month: "long"
+   
+    });
+    let year = timeNow.getFullYear();
+    let period = "AM";
+
+    if (hoursOfDay > 12) {
+        hoursOfDay-= 12;
+        period= "PM";
+    }
+
+    if (hoursOfDay === 0) {
+        hoursOfDay =12;
+        period= "AM";
+    }
+
+    hoursOfDay = hoursOfDay < 10 ? "0" + hoursOfDay : hoursOfDay;
+    minutes = minutes < 10 ? "0" + minutes : minutes;
+    seconds = seconds < 10 ? "0" + seconds : seconds;
+
+    let time = hoursOfDay + ":" + minutes + ":" + seconds +period;
+
+    document.getElementById('Clock').innerHTML = time + " " + today + " " + months + " " +year ;
+
+}
+displayTime();
+</script>
+ 
+   </body>
+</html>
+</body>
+</html>

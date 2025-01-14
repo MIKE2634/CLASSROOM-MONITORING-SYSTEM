@@ -1,0 +1,772 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+	body{
+   background-color:silver;
+   margin:0;
+   border: 15px solid teal;
+		}
+      .edu {
+        display: flex;
+		}
+      .weko{
+	 background-color:aqua;
+	  }
+	  .shit{
+	 background-color:teal;
+	  }
+	  .low{
+	 background-color:red;
+	  }
+      
+	  
+	  
+    </style>
+
+    <script>
+	window.onload = function() {
+  // Get the current day of the week (0 = Sunday, 1 = Monday, etc.)
+  var dayOfWeek = new Date().getDay();
+
+  // Get the div element containing the table for the current day of the week
+  var div = document.getElementById([
+    "sunday",
+    "monday",
+    "tuesday",
+    "wednesday",
+    "thursday",
+    "friday",
+    "saturday",
+  ][dayOfWeek]);
+
+  // Get all the table cells with task start and end times
+  var start_times = div.querySelectorAll("td:nth-child(2)");
+  var end_times = div.querySelectorAll("td:nth-child(3)");
+
+  // Get the current time in minutes
+  var d = new Date();
+  var current_time = d.getHours() * 60 + d.getMinutes();
+
+  // Loop through each start time cell and change the background color
+  for (var i = 0; i < start_times.length; i++) {
+    // Get the start and end times of the current task in minutes
+    var start_time = timeToMinutes(start_times[i].innerText);
+    var end_time = timeToMinutes(end_times[i].innerText);
+
+    // Check if the cell has a stored color in local storage
+    var storedColor = localStorage.getItem(dayOfWeek + "-" + i);
+    if (storedColor) {
+      start_times[i].parentNode.style.backgroundColor = storedColor;
+    } else {
+      // Determine whether the task is ongoing or upcoming
+      if (start_time <= current_time && current_time < end_time) {
+        // Task is ongoing
+        start_times[i].parentNode.style.backgroundColor = "green";
+      } else if (current_time < start_time) {
+        // Task is upcoming
+        start_times[i].parentNode.style.backgroundColor = "yellow";
+      } else {
+        // Task is already completed
+        start_times[i].parentNode.style.backgroundColor = "gray";
+      }
+    }
+  }
+
+  // Listen for click events on the table cells
+  div.addEventListener("click", function(event) {
+    // Check if the clicked element is a table cell
+    if (event.target.tagName === "TD") {
+      // Check if the task has already been completed
+      if (event.target.style.backgroundColor === "gray") {
+        alert("This task has already been completed.");
+      } else {
+        // Change the background color to red to indicate a missed task
+        event.target.style.backgroundColor = "red";
+        // Store the color in local storage
+        var index = Array.prototype.indexOf.call(start_times, event.target.previousElementSibling);
+        localStorage.setItem(dayOfWeek + "-" + index, "red");
+     // Add the missed task to the "missedTasks" table
+	 var task = event.target.parentNode.cells[0].innerText;
+      var startTime = event.target.parentNode.cells[1].innerText;
+      var endTime = event.target.parentNode.cells[2].innerText;
+      addMissedTask(task, startTime, endTime);
+	  }
+    }
+  });
+  function addMissedTask(task, startTime, endTime) {
+  var table = document.getElementById("missedTasks");
+  var rows = table.rows;
+  var exists = false;
+
+  // Check if the task already exists in the table
+  for (var i = 1; i < rows.length; i++) {
+    var row = rows[i];
+    if (row.cells[0].innerText === task && row.cells[1].innerText === startTime && row.cells[2].innerText === endTime) {
+      exists = true;
+      break;
+    }
+  }
+localStorage.setItem("missedTasks", document.getElementById("missedTasks").innerHTML);
+
+  // Add the task to the table if it doesn't already exist
+  if (!exists) {
+    var row = table.insertRow();
+    row.insertCell().innerText = task;
+    row.insertCell().innerText = startTime;
+    row.insertCell().innerText = endTime;
+  }
+}
+
+// Listen for click events on the missedTasks table
+document.getElementById("missedTasks").addEventListener("click", function(event) {
+  // Check if the clicked element is a table cell
+  if (event.target.tagName === "TD") {
+    // Remove the parent row of the clicked cell
+    event.target.parentNode.remove();
+  }
+});
+
+  // Function to convert a time string (e.g. '9:00 AM') to minutes
+  function timeToMinutes(time) {
+    var parts = time.split(":");
+    var hours = parseInt(parts[0]);
+    var minutes = parseInt(parts[1].split(" ")[0]);
+    var ampm = parts[1].split(" ")[1];
+    if (ampm === "PM" && hours !== 12) {
+      hours += 12;
+    } else if (ampm === "AM" && hours === 12) {
+      hours = 0;
+    }
+    return hours * 60 + minutes;
+  }
+  if (localStorage.getItem("missedTasks")) {
+  document.getElementById("missedTasks").innerHTML = localStorage.getItem("missedTasks");
+}
+
+};
+
+    </script>
+  </head>
+
+  <body>
+  <div class ="edu">
+  <div class="monday">
+ 
+ <h1 class="weko">MONDAY</h1>
+ 
+    <div id="monday">
+    
+   <h2 class ="shit"><b>COMP LAB 01</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>5:30 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>COMP LAB 02</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>5:30 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"<b>COM LAB 03</B></h2>
+	  <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:30 AM</td>
+          <td>10:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>2:0O PM</td>
+          <td>4:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>7:00 PM</td>
+        </tr>
+      </table>
+	     <h2 class ="shit"><b>PHYSICS LAB</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+    </div>
+	</div>
+	
+	 <div class="tuesday">
+	 
+	 
+	<h1 class="weko">TUESDAY</h1>
+	
+    <div id="tuesday">
+    
+   <h2 class ="shit"><b>COMP LAB 01</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>COMP LAB 02</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>5:30 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>COMP LAB 03</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>PHYSICS LAB</B></h2>
+	  <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>9:30 AM</td>
+          <td>11:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>11:30 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+        </div>
+	</div>
+	 <div class="wednesday">
+	 
+	<h1 class="weko">WEDNESDAY</h1>
+
+    <div id="wednesday">
+    
+   <h2 class ="shit"><b>COMP LAB 01</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:30 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:00 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>COMP LAB 02</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>5:30 PM</td>
+        </tr>
+      </table>
+	     <h2 class ="shit"><b>COMP LAB 03</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>PHYSICS LAB</B></h2>
+	  <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+    </div>
+	</div>
+	 <div class="thursday">
+	 
+	<h1 class="weko">THURSDAY </h1>
+
+    <div id="thursday">
+    
+   <h2 class ="shit"><b>COMP LAB 01</B></h2>
+      <table border="1" cellspacing="15" >
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+		
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>COMP LAB 02</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>5:30 PM</td>
+        </tr>
+      </table>
+	     <h2 class ="shit"><b> COMP LAB 03</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>PHYSICS LAB</B></h2>
+	  <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:30 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:00 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:00 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+    </div>
+	</div>
+
+	  <div class="friday">
+	  
+	<h1 class="weko">FRIDAY</h1>
+	
+    <div id="friday">
+    
+   <h2 class ="shit"><b>COMP LAB 01</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>2:00 PM</td>
+          <td>4:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:00 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b>COMP LAB02</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>9:30 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:30 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:05 PM</td>
+          <td>5:30 PM</td>
+        </tr>
+      </table>
+	     <h2 class ="shit"><b>COMP LAB 03</B></h2>
+      <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>7:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:30 AM</td>
+          <td>1:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>3:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>3:30 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+	  <h2 class ="shit"><b> PHYSICS LAB</B></h2>
+	  <table border="1" cellspacing="15">
+        <tr>
+          <th>Task</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+        </tr>
+        <tr>
+          <td>Task 1</td>
+          <td>8:00 AM</td>
+          <td>10:00 AM</td>
+        </tr>
+        <tr>
+          <td>Task 2</td>
+          <td>10:00 AM</td>
+          <td>12:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 3</td>
+          <td>1:05 PM</td>
+          <td>4:00 PM</td>
+        </tr>
+        <tr>
+          <td>Task 4</td>
+          <td>4:00 PM</td>
+          <td>6:00 PM</td>
+        </tr>
+      </table>
+    </div>
+   </div> 
+  </div>
+  <h2><b>Missed Tasks</B></h2>
+  
+  <table id="missedTasks" border="1" cellspacing="15" class="low">
+  <tr>
+    <th>Task</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+  </tr>
+</table>
+
+    </body>
+</html>
